@@ -27,7 +27,7 @@ import {
 interface SidebarActionsProps {
   chat: Chat
   removeChat: (args: { id: string; path: string }) => ServerActionResult<void>
-  shareChat: (id: string) => ServerActionResult<Chat>
+  shareChat: (id: string) => any
 }
 
 export function SidebarActions({
@@ -54,7 +54,6 @@ export function SidebarActions({
               <span className="sr-only">Share</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Share chat</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>

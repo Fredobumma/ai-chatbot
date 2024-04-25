@@ -17,10 +17,10 @@ export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
   session?: Session
-  missingKeys: string[]
+  missingKeys?: string[]
 }
 
-export function Chat({ id, className, session, missingKeys }: ChatProps) {
+export function Chat({ id, className, missingKeys }: ChatProps) {
   const router = useRouter()
   const path = usePathname()
   const [input, setInput] = useState('')
@@ -30,12 +30,10 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
   const [_, setNewChatId] = useLocalStorage('newChatId', id)
 
   useEffect(() => {
-    if (session?.user) {
-      if (!path.includes('chat') && messages.length === 1) {
-        window.history.replaceState({}, '', `/chat/${id}`)
-      }
+    if (!path.includes('chat') && messages.length === 1) {
+      window.history.replaceState({}, '', `/chat/${id}`)
     }
-  }, [id, path, session?.user, messages])
+  }, [id, path, messages])
 
   useEffect(() => {
     const messagesLength = aiState.messages?.length
@@ -49,7 +47,7 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
   })
 
   useEffect(() => {
-    missingKeys.map(key => {
+    missingKeys?.map(key => {
       toast.error(`Missing ${key} environment variable!`)
     })
   }, [missingKeys])
@@ -67,7 +65,7 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
         ref={messagesRef}
       >
         {messages.length ? (
-          <ChatList messages={messages} isShared={false} session={session} />
+          <ChatList messages={messages} />
         ) : (
           <EmptyScreen />
         )}

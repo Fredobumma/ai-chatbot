@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+'use client'
 
-export default async function NewPage() {
-  redirect('/')
+export default function NewPage() {
+  window.location.href = '/'
 }
