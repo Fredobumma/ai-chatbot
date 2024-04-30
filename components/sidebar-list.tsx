@@ -1,8 +1,12 @@
+"use client"
+
+import { cache, useEffect, useState } from 'react'
+
 import { clearChats, getChats } from '@/app/actions'
 import { ClearHistory } from '@/components/clear-history'
 import { SidebarItems } from '@/components/sidebar-items'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { cache } from 'react'
+import { Chat } from '@/lib/types'
 
 interface SidebarListProps {
   userId?: string
@@ -14,7 +18,16 @@ const loadChats = cache(async (userId?: string) => {
 })
 
 export async function SidebarList({ userId }: SidebarListProps) {
-  const chats = await loadChats(userId)
+  const [chats, setChats] = useState<Chat[]>([])
+
+  useEffect(()=> {
+    const getChats = async () => {
+      const result = await loadChats(userId);
+      setChats(result)
+    }
+
+    getChats()
+  }, [userId])
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
